@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trans-Saharan Trade Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <h1>Trans-Saharan Trade Game</h1>
+        <div id="game">
+            <div id="resources">
+                <p>Gold: <span id="gold">0</span></p>
+                <p>Money: <span id="money">100</span></p>
+                <p>Energy: <span id="energy">100</span></p>
+            </div>
+            <div id="buttonRows">
+                <div id="actionRowTop">
+                    <button id="mineGold" onclick="mineGold()">Mine for Gold</button>
+                    <button id="earnEnergy" onclick="showQuestion()">Earn Energy</button>
+                </div>
+                <div id="actionRowBottom">
+                    <button id="buyGold" onclick="buyGold()">Buy Gold</button>
+                    <button id="sellGold" onclick="sellGold()">Sell Gold</button>
+                </div>
+            </div>
+            <div id="quiz" style="display:none;">
+                <p id="question"></p>
+                <div id="answers"></div>
+            </div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>

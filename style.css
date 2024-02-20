@@ -1,0 +1,70 @@
+body, html {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    padding: 20px;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    font-size: 18px;
+}
+
+h1 {
+    color: #5b6c5d;
+    margin-bottom: 20px;
+}
+
+#gameContainer {
+    margin: auto;
+    width: 450px;
+    border: 3px solid #8aa2a9;
+    padding: 25px;
+    background-color: #e8eff1;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+#resources p, .game-over {
+    font-size: 20px;
+    color: #6a8d92;
+    margin: 10px 0;
+}
+
+#buttonRows > div {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+#buttonRows button {
+    padding: 15px 22px;
+    background-color: #8aa2a9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 20px; /* Adjust size as needed for emphasis */
+}
+
+#buttonRows button:hover {
+    background-color: #759593;
+}
+
+#quiz {
+    margin-top: 20px;
+}
+
+#quiz button {
+    display: block;
+    margin: 10px auto;
+    font-size: 18px;
+}
+
+.game-over button {
+    background-color: #8aa2a9;
+    color: white;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    font-size: 20px;
+}
