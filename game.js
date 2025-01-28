@@ -1,14 +1,15 @@
-document.addEventListener('DOMContentLoaded', initializeGame);
+document.addEventListener('DOMContentLoaded', () => {
+    setupWelcomeScreen();
+});
 
 let gold = 0;
 let money = 0;
 let energy = 100;
-let taxRate = 1;
+let taxRate = 10; // Initial tax rate (percentage)
 let missedPayments = 0;
-let taxIncreases = 0;
-const maxTaxIncreases = 6; // Limit for tax rate increases
+let taxationInterval = 45000; // Tax interval (45 seconds)
 let currentQuestionIndex = 0;
-let taxInterval, taxRateInterval, gameEndTimer;
+let taxInterval, gameEndTimer;
 
 const questions = [
     { question: "What was a major export of the Ghana Empire?", answers: ["Salt", "Gold", "Silk", "Spices"], correct: 1 },
@@ -31,70 +32,57 @@ const questions = [
     { question: "Which civilization led to the downfall of the Ghana Empire?", answers: ["Byzantine Empire", "Almoravid Dynasty", "Songhai Empire", "Abbasid Caliphate"], correct: 1 },
     { question: "What is one king from the Ghana Empire that we have historical accounts about?", answers: ["Mansa Musa", "Ibn Battuta", "Ismail I", "Tunka Manin"], correct: 3 },
     { question: "True or false: Most people living in the Ghana Empire converted to Islam.", answers: ["True", "False"], correct: 1 },
-    
 ];
+
+function setupWelcomeScreen() {
+    const gameContainer = document.getElementById('gameContainer');
+    gameContainer.innerHTML = `
+        <div id="welcomeScreen">
+            <h1>Welcome to the Trans-Saharan Trade Game!</h1>
+            <p>You are a merchant in the Ghana Empire. Mine and sell gold while managing your resources. Beware of King Cabral's taxes and the Almoravids!</p>
+            <button onclick="initializeGame()">Start Game</button>
+        </div>
+    `;
+}
 
 function initializeGame() {
     setupGameHTML();
     startTaxation();
-    setTimeout(() => {
-        alert("The Almoravids are attacking! Sell your gold now before the Ghana Empire collapses!");
-    }, 450000);
     gameEndTimer = setTimeout(() => {
-        alert("The Ghana Empire has collapsed, you have no one to sell your gold to anymore.");
-        endGame();
-    }, 480000); // End game after 8 minutes
+        alert("The Almoravids are attacking! Sell your gold now before the Ghana Empire collapses!");
+        setTimeout(() => endGame("The Ghana Empire has collapsed, you have no one to sell your gold to anymore."), 30000);
+    }, 450000); // Warning at 7 minutes, game ends at 8 minutes
 }
 
 function setupGameHTML() {
     const gameContainer = document.getElementById('gameContainer');
     gameContainer.innerHTML = `
-        <h1>Trans-Saharan Trade Game</h1>
-        <div id="game">
-            <div id="resources">
-                <p>Gold: <span id="gold">${gold}</span></p>
-                <p>Money: <span id="money">${money}</span></p>
-                <p>Energy: <span id="energy">${energy}</span></p>
-            </div>
-            <div id="actions">
-                <button id="buyGold" onclick="buyGold()">Buy Gold</button>
-                <button id="sellGold" onclick="sellGold()">Sell Gold</button>
+        <div id="resources">
+            <p>Gold: <span id="gold">0</span></p>
+            <p>Money: <span id="money">0</span></p>
+            <p>Energy: <span id="energy">100</span></p>
+        </div>
+        <div id="buttonRows">
+            <div id="actionRowTop">
                 <button id="mineGold" onclick="mineGold()">Mine for Gold</button>
                 <button id="earnEnergy" onclick="showQuestion()">Earn Energy</button>
             </div>
-            <div id="quiz" style="display:none;">
-                <p id="question"></p>
-                <div id="answers"></div>
+            <div id="actionRowBottom">
+                <button id="sellGold" onclick="sellGold()">Sell Gold</button>
             </div>
+        </div>
+        <div id="quiz" style="display:none;">
+            <p id="question"></p>
+            <div id="answers"></div>
         </div>
     `;
     updateResources();
 }
 
-function buyGold() {
-    if (money >= 50) {
-        gold += 1;
-        money -= 50;
-        updateResources();
-    } else {
-        alert("Not enough money to buy gold!");
-    }
-}
-
-function sellGold() {
-    if (gold > 0) {
-        gold -= 1;
-        money += 50;
-        updateResources();
-    } else {
-        alert("You have no gold to sell!");
-    }
-}
-
 function mineGold() {
-    if (energy >= 20) {
+    if (energy >= 20) { // Mining requires 20 energy
         energy -= 20;
-        const goldMined = Math.floor(Math.random() * 3) + 1;
+        const goldMined = Math.floor((Math.random() * 3 + 1) * 1.5); // 50% more gold
         gold += goldMined;
         alert(`You mined ${goldMined} gold!`);
         updateResources();
@@ -103,10 +91,21 @@ function mineGold() {
     }
 }
 
+function sellGold() {
+    if (gold > 0) {
+        money += 50; // Earn money for one gold sold
+        gold -= 1;
+        alert("You sold 1 gold for 50 money!");
+        updateResources();
+    } else {
+        alert("You have no gold to sell!");
+    }
+}
+
 function showQuestion() {
     const questionObj = questions[currentQuestionIndex];
     document.getElementById('question').textContent = questionObj.question;
-    let answersHtml = questionObj.answers.map((answer, index) => 
+    const answersHtml = questionObj.answers.map((answer, index) =>
         `<button onclick="selectAnswer(${index}, ${questionObj.correct})">${answer}</button>`
     ).join('');
     document.getElementById('answers').innerHTML = answersHtml;
@@ -126,56 +125,39 @@ window.selectAnswer = function(selected, correct) {
 };
 
 function startTaxation() {
-    taxInterval = setInterval(applyTax, 30000);
-    taxRateInterval = setInterval(() => {
-        if (taxIncreases < maxTaxIncreases) {
-            taxRate++;
-            taxIncreases++;
-            alert(`Tax rate increased to ${taxRate}.`);
-        }
-    }, 60000);
+    let baseTaxAmount = 1; // Minimum tax starts at 1 gold
+
+    setTimeout(() => {
+        taxInterval = setInterval(() => {
+            applyTax(baseTaxAmount);
+            baseTaxAmount += 1; // Increment base tax over time
+        }, taxationInterval); // Collect taxes every 30 seconds
+    }, 60000); // Delay taxation by 1 minute
 }
 
-function applyTax() {
-    if (gold >= taxRate) {
-        gold -= taxRate;
-        alert(`King Cabral has taken ${taxRate} gold as tax.`);
+function applyTax(baseTaxAmount) {
+    const taxAmount = Math.max(Math.floor(gold * (taxRate / 100)), baseTaxAmount);
+    if (gold >= taxAmount) {
+        gold -= taxAmount;
+        alert(`King Cabral has taken ${taxAmount} gold (${taxRate}%) as tax.`);
     } else {
         missedPayments++;
-        if (missedPayments >= 2) {
-            alert("You cannot pay King Cabral's gold tax. Game Over.");
-            clearTimeout(gameEndTimer); // Cancel the scheduled game end
-            endGame();
-            return;
+        if (missedPayments === 1) {
+            alert("You couldn't pay the full tax. King Cabral is not happy! Gather more gold to avoid his wrath.");
+        } else if (missedPayments >= 2) {
+            endGame("You have faced the wrath of King Cabral. The game is over.");
         }
-        alert("You can't afford the gold tax. King Cabral is unhappy. Collect more gold or face the consequences.");
     }
     updateResources();
 }
 
-function endGame() {
+function endGame(gameOverMessage) {
     clearInterval(taxInterval);
-    clearInterval(taxRateInterval);
-    let playerName = prompt("Game Over! Enter your name for the scoreboard:", "Player Name");
-    if (playerName) {
-        saveScore(playerName, money);
-        showScores();
-    }
-}
+    clearTimeout(gameEndTimer); // Ensure the game timer stops
+    alert(gameOverMessage);
 
-function saveScore(playerName, score) {
-    const scores = JSON.parse(localStorage.getItem('scores')) || [];
-    scores.push({ playerName, score });
-    localStorage.setItem('scores', JSON.stringify(scores));
-}
-
-function showScores() {
-    const scores = JSON.parse(localStorage.getItem('scores')) || [];
-    let scoresHTML = '<h2>Scoreboard</h2>';
-    scores.forEach((entry, index) => {
-        scoresHTML += `<p>${index + 1}. ${entry.playerName} - ${entry.score}</p>`;
-    });
-    document.getElementById('gameContainer').innerHTML = scoresHTML;
+    // Disable buttons to prevent further actions
+    document.querySelectorAll('#mineGold, #earnEnergy, #sellGold').forEach(button => button.disabled = true);
 }
 
 function updateResources() {
