@@ -154,10 +154,27 @@ function applyTax(baseTaxAmount) {
 function endGame(gameOverMessage) {
     clearInterval(taxInterval);
     clearTimeout(gameEndTimer); // Ensure the game timer stops
-    alert(gameOverMessage);
 
-    // Disable buttons to prevent further actions
-    document.querySelectorAll('#mineGold, #earnEnergy, #sellGold').forEach(button => button.disabled = true);
+    const gameContainer = document.getElementById('gameContainer');
+    gameContainer.innerHTML = `
+        <div id="endScreen">
+            <h1>Game Over</h1>
+            <p>${gameOverMessage}</p>
+            <p>Thanks for playing!</p>
+            <button onclick="restartGame()">Restart Game</button>
+        </div>
+    `;
+}
+
+function restartGame() {
+    gold = 0;
+    money = 0;
+    energy = 100;
+    taxRate = 10;
+    missedPayments = 0;
+    clearInterval(taxInterval);
+    clearTimeout(gameEndTimer);
+    initializeGame();
 }
 
 function updateResources() {
