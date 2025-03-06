@@ -12,11 +12,11 @@ let currentQuestionIndex = 0;
 let taxInterval, gameEndTimer;
 
 const questions = [
-    { question: "What was a major export of the Ghana Empire?", answers: ["Salt", "Gold", "Silk", "Spices"], correct: 1 },
+    { question: "What was a commodity that the Ghana Empire had a lot of?", answers: ["Salt", "Gold", "Silk", "Spices"], correct: 1 },
     { question: "Which animal was crucial for Trans-Saharan trade?", answers: ["Horse", "Elephant", "Camel", "Lion"], correct: 2 },
     { question: "Which empire succeeded the Ghana Empire?", answers: ["Roman Empire", "Mali Empire", "Ottoman Empire", "British Empire"], correct: 1 },
-    { question: "What was a significant import into the Ghana Empire?", answers: ["Tea", "Horses", "Silk", "Spices"], correct: 2 },
-    { question: "What material was considered valuable in North Africa and exchanged for gold?", answers: ["Salt", "Silk", "Spices", "Ivory"], correct: 0 },
+    { question: "What was a significant import into the Ghana Empire, often trading equal weights of gold for it?", answers: ["Tea", "Horses", "Salt", "Spices"], correct: 2 },
+    { question: "What was another commodity exchanged along with Trans-Saharan trade routes besides gold and salt?", answers: ["Silk", "Salt", "Guns", "Islam"], correct: 0 },
     { question: "What was the actual name of the Ghana Empire?", answers: ["Zimbabwe", "Mali", "Ghana", "Wagadou"], correct: 3 },
     { question: "What was the title for the king of the Ghana Empire?", answers: ["Ghana", "Emperor", "Sultan", "Caliph"], correct: 0 },
     { question: "Which of the following was NOT traded along the Trans-Saharan trade routes?", answers: ["Gold", "Islam", "Salt", "Horses"], correct: 3 },
@@ -29,7 +29,7 @@ const questions = [
     { question: "Which of the following words means that power in the Ghana Empire was passed down to the king's sister's first son?", answers: ["patrilineal", "monarchy", "patriarchal", "matrilineal"], correct: 3 },
     { question: "What religion did many merchants adopt in the Ghana Empire?", answers: ["Islam", "Judaism", "Hinduism", "Buddhism"], correct: 0 },
     { question: "What is one written source that we have on the Ghana Empire?", answers: ["European Explorer Marco Polo", "Arab Historian al-Bakri", "Chinese General Sun Tzu", "African King Tunka Manin"], correct: 1 },
-    { question: "Which civilization led to the downfall of the Ghana Empire?", answers: ["Byzantine Empire", "Almoravid Dynasty", "Songhai Empire", "Abbasid Caliphate"], correct: 1 },
+    { question: "Which civilization led to the downfall of the Ghana Empire?", answers: ["Byzantine Empire", "Almoravid Empire", "Songhai Empire", "Abbasid Caliphate"], correct: 1 },
     { question: "What is one king from the Ghana Empire that we have historical accounts about?", answers: ["Mansa Musa", "Ibn Battuta", "Ismail I", "Tunka Manin"], correct: 3 },
     { question: "True or false: Most people living in the Ghana Empire converted to Islam.", answers: ["True", "False"], correct: 1 },
 ];
